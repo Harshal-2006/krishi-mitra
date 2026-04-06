@@ -78,28 +78,19 @@
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
 
-    // Toggle the "show" class when hamburger is clicked
     hamburger.addEventListener('click', () => {
         navMenu.classList.toggle('show');
         
-        // Optional: Change icon to an 'X' when open
         const icon = hamburger.querySelector('i');
         icon.classList.toggle('fa-bars');
         icon.classList.toggle('fa-times');
     });
 
-    // 1. Get the current page URL path
     const currentPath = window.location.pathname;
-    
-    // 2. Select all navigation links
     const navLinks = document.querySelectorAll('.nav-links a');
 
     navLinks.forEach(link => {
-        // 3. Remove any existing 'active' class
         link.classList.remove('active');
-
-        // 4. If the link's href matches the current path, highlight it
-        // We check for '/' specifically for the Home link
         if (link.getAttribute('href') === currentPath || 
            (currentPath === '/' && link.getAttribute('href') === '/')) {
             link.classList.add('active');

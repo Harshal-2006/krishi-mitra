@@ -35,8 +35,31 @@
         </div>
     </header>
 
+<section class="weather-dashboard container">
+    <div class="weather-header">
+        <h2>🌾 7-Day Farm Forecast</h2>
+        
+        <div class="search-container">
+            <input type="text" id="city-search" placeholder="Enter village or city...">
+            <button onclick="searchLocation()"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <span class="loc-badge" id="current-loc">📍 Saswad, Maharashtra</span>
+    </div>
+
+    <div id="agri-alert" class="agri-alert">
+        <i class="fas fa-robot"></i> <span>Analyzing weather data...</span>
+    </div>
+
+    <div class="forecast-container" id="forecast-container">
+        <p>Loading satellite data...</p>
+    </div>
+</section>
+
     <section id="tools" class="container">
-        <h2 class="section-title">Our AI Powered Tools</h2>
+        <h2 class="section-title">Our Tools</h2>
         <div class="cards">
             <a href="/doctor" class="card">
                 <div class="icon">🩺</div>
@@ -48,8 +71,8 @@
             <a href="/advisor" class="card">
                 <div class="icon">🌾</div>
                 <h2>Crop Advisor</h2> 
-                <p>Read standard guidelines and tips for protecting your harvest.</p>
-                <span class="btn">View Tips</span>
+                <p>Get recommendations for the best crops to grow based on your soil type and season.</p>
+                <span class="btn">Get Advice</span>
             </a>
 
             <a href="/schemes" class="card">
@@ -66,7 +89,7 @@
             <div class="about-grid">
                 <div class="about-text">
                     <h2>Why Choose KrishiMitra?</h2>
-                    <p>Agriculture is the backbone of our economy. KrishiMitra uses <strong>Google Gemini AI</strong> to bridge the gap between traditional farming and modern technology.</p>
+                    <p>Agriculture is the backbone of our economy. KrishiMitra uses <strong>AI</strong> to bridge the gap between traditional farming and modern technology.</p>
                     <ul class="benefit-list">
                         <li><i class="fas fa-check-circle"></i> Instant Disease Detection</li>
                         <li><i class="fas fa-check-circle"></i> Localized Crop Advice</li>
@@ -80,60 +103,132 @@
         </div>
     </section>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>🌿 KrishiMitra</h3>
-                <p>Leading the digital revolution in Indian Agriculture.</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="/advisor">Crop Advisor</a></li>
-                    <li><a href="/doctor">AI Plant Doctor</a></li>
-                    <li><a href="/schemes">Government Schemes</a></li>
-                </ul>
-            </div>
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>🌿 KrishiMitra</h3>
+            <p>Built with ❤️ for farmers</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="/advisor" style="color: #d8f3dc; text-decoration: none;">Crop Advisor</a></li>
+                <li><a href="/doctor" style="color: #d8f3dc; text-decoration: none;">AI Plant Doctor</a></li>
+                <li><a href="/schemes" style="color: #d8f3dc; text-decoration: none;">Government Schemes</a></li>
+            </ul>
+        </div>
 
-            <div class="footer-section">
-                <h3>Team Project</h3>
-                <p>National Project Competition 2026.<br>Saswad, Maharashtra.</p>
-            </div>
+        <div class="footer-section">
+            <h3>Team Project</h3>
+            <p>Developed for Project Competition 2026.</p>
         </div>
-        <div class="footer-bottom">
-            &copy; 2026 KrishiMitra Team
-        </div>
-    </footer>
+    </div>
+    
+    <div class="footer-bottom">
+        &copy; 2026 KrishiMitra Team 
+    </div>
+</footer>
 
 
 </body>
 <script>
 
+let currentLat = 18.34;
+let currentLon = 74.03;
+let currentCity = "Saswad, Maharashtra";
+
+async function fetchAgriWeather(lat, lon, cityName) {
+    try {
+        document.getElementById('current-loc').innerText = `📍 ${cityName}`;
+        document.querySelector('#agri-alert span').innerHTML = "Analyzing weather data...";
+        const container = document.getElementById('forecast-container');
+        container.innerHTML = '<p>Loading satellite data...</p>';
+
+        // Fetch Weather
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto`);
+        const data = await response.json();
+        
+        container.innerHTML = ''; 
+        const daily = data.daily;
+        for (let i = 0; i < 7; i++) {
+            const dateObj = new Date(daily.time[i]);
+            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            const maxTemp = Math.round(daily.temperature_2m_max[i]);
+            const rain = daily.precipitation_sum[i];
+            const icon = rain > 0 ? '🌧️' : '☀️';
+
+            container.innerHTML += `
+                <div class="forecast-card">
+                    <div class="date">${dayName}</div>
+                    <div style="font-size: 1.5rem;">${icon}</div>
+                    <div class="temp">${maxTemp}°C</div>
+                    <div class="rain">💧 ${rain} mm</div>
+                </div>
+            `;
+        }
+
+        const tomorrowRain = daily.precipitation_sum[1];
+        const alertBox = document.querySelector('#agri-alert span');
+        
+        if (tomorrowRain > 2) {
+            alertBox.innerHTML = "<strong>Alert:</strong> Heavy rain expected tomorrow. Delay pesticide spraying and ensure field drainage.";
+        } else if (daily.temperature_2m_max[1] > 35) {
+            alertBox.innerHTML = "<strong>Alert:</strong> High heat warning tomorrow. Irrigate crops early in the morning.";
+        } else {
+            alertBox.innerHTML = "<strong>Advice:</strong> Weather is stable. Good conditions for harvesting and routine field work.";
+        }
+
+    } catch (error) {
+        console.error("Weather fetch failed:", error);
+        document.getElementById('forecast-container').innerHTML = "<p>Unable to load weather data.</p>";
+    }
+}
+
+// Search Logic
+async function searchLocation() {
+    const query = document.getElementById('city-search').value;
+    if (!query) return;
+
+    document.getElementById('current-loc').innerText = "📍 Searching...";
+    
+    try {
+        const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${query}&count=1&language=en&format=json`);
+        const geoData = await geoRes.json();
+
+        if (geoData.results && geoData.results.length > 0) {
+            const location = geoData.results[0];
+            let locName = location.name;
+            if (location.admin1) locName += `, ${location.admin1}`; 
+            fetchAgriWeather(location.latitude, location.longitude, locName);
+        } else {
+            alert("Location not found. Please try another village or city.");
+            document.getElementById('current-loc').innerText = `📍 ${currentCity}`;
+        }
+    } catch (error) {
+        console.error("Geocoding failed:", error);
+        alert("Error searching for location.");
+    }
+}
+
+document.getElementById('city-search').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') searchLocation();
+});
+fetchAgriWeather(currentLat, currentLon, currentCity);
+
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
-
-    // Toggle the "show" class when hamburger is clicked
     hamburger.addEventListener('click', () => {
         navMenu.classList.toggle('show');
-        
-        // Optional: Change icon to an 'X' when open
         const icon = hamburger.querySelector('i');
         icon.classList.toggle('fa-bars');
         icon.classList.toggle('fa-times');
     });
-    // 1. Get the current page URL path (e.g., /advisor or /doctor)
     const currentPath = window.location.pathname;
-    
-    // 2. Select all navigation links inside the navbar
     const navLinks = document.querySelectorAll('.nav-links a');
 
     navLinks.forEach(link => {
-        // 3. Remove 'active' class from all links first to ensure a clean state
         link.classList.remove('active');
-
-        // 4. Check if the link's href matches the current path
-        // We also specifically check for the root "/" to highlight HOME correctly
         const linkHref = link.getAttribute('href');
         
         if (linkHref === currentPath || (currentPath === '/' && linkHref === '/')) {

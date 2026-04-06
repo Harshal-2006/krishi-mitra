@@ -135,32 +135,46 @@ def predict():
 def schemes():
     active_schemes = [
         {
-            "name": "PM-KISAN Samman Nidhi",
-            "benefit": "₹6,000 per year (3 installments of ₹2,000)",
-            "status": "22nd Installment released in March 2026",
-            "link": "https://pmkisan.gov.in/",
-            "type": "Central Govt"
+            "name": "PM-KISAN",
+            "type": "Income Support",
+            "benefit": "₹6,000 per year in three installments.",
+            "status": "Active - 12th Installment Out",
+            "link": "https://pmkisan.gov.in/"
         },
         {
-            "name": "Namo Shetkari Mahasanman Nidhi",
-            "benefit": "Additional ₹6,000 per year for Maharashtra farmers",
-            "status": "8th Installment released March 25, 2026",
-            "link": "https://nsmny.mahait.org/",
-            "type": "Maharashtra Govt"
+            "name": "PM Fasal Bima Yojana",
+            "type": "Insurance",
+            "benefit": "Lowest premium insurance against crop failure.",
+            "status": "Enrollment Open for Kharif 2026",
+            "link": "https://pmfby.gov.in/"
         },
         {
-            "name": "PM Fasal Bima Yojana (PMFBY)",
-            "benefit": "Comprehensive crop insurance at 1.5% - 2% premium",
-            "status": "Enrollment open for Kharif 2026",
-            "link": "https://pmfby.gov.in/",
-            "type": "Insurance"
+            "name": "Kisan Credit Card (KCC)",
+            "type": "Financial",
+            "benefit": "Short-term credit at 4% interest rate.",
+            "status": "Available at all National Banks",
+            "link": "https://www.myscheme.gov.in/schemes/kcc"
         },
         {
-            "name": "Magel Tyala Shettale",
-            "benefit": "Subsidy of ₹50,000 for building farm ponds",
-            "status": "Active - Apply via MahaDBT portal",
-            "link": "https://mahadbt.maharashtra.gov.in/",
-            "type": "Maharashtra Govt"
+            "name": "PM Krishi Sinchai",
+            "type": "Subsidy",
+            "benefit": "Up to 80% subsidy on Drip/Sprinkler systems.",
+            "status": "State-wise allocation active",
+            "link": "https://pmksy.gov.in/"
+        },
+        {
+            "name": "e-NAM",
+            "type": "Marketing",
+            "benefit": "Direct online selling to buyers across India.",
+            "status": "Over 1.7 Crore Farmers Registered",
+            "link": "https://www.enam.gov.in/"
+        },
+        {
+            "name": "Soil Health Card",
+            "type": "Diagnostic",
+            "benefit": "Free soil nutrient analysis every 2 years.",
+            "status": "New Cycle starting April 2026",
+            "link": "https://soilhealth.dac.gov.in/"
         }
     ]
     return render_template('schemes.html', schemes=active_schemes)
