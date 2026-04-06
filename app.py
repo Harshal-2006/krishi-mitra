@@ -9,13 +9,53 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 load_dotenv() # .env
 
+import h5py
+import json
+
+
+def load_legacy_h5(filepath):
+    # 1. Open the raw H5 file
+    f = h5py.File(filepath, mode='r')
+    
+    # 2. Read the raw model config
+    model_config = f.attrs.get('model_config')
+    if model_config is None:
+        raise ValueError('No model config found in h5 file.')
+        
+    # 3. Decode from bytes to string, then to a Python Dictionary
+    config_str = model_config.decode('utf-8')
+    config_dict = json.loads(config_str)
+    
+    # 4. SURGERY: Find the InputLayer and fix the bad keywords
+    for layer in config_dict['config']['layers']:
+        if layer['class_name'] == 'InputLayer':
+            # Change 'batch_shape' to 'batch_input_shape'
+            if 'batch_shape' in layer['config']:
+                layer['config']['batch_input_shape'] = layer['config'].pop('batch_shape')
+            # Completely remove 'optional'
+            if 'optional' in layer['config']:
+                del layer['config']['optional']
+                
+    # 5. Convert back to string and bytes
+    fixed_config_str = json.dumps(config_dict)
+    f.attrs.modify('model_config', fixed_config_str.encode('utf-8'))
+    f.close()
+    
+    # 6. Load the fixed model using tf_keras
+    return tf_keras.models.load_model(filepath, compile=False)
+
+# Load your model using the surgeon function
+model = load_legacy_h5('plant_model.h5')
 os.environ['TF_USE_LEGACY_KERAS'] = '1'
+
+
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 #Load model
-model = tf_keras.models.load_model('plant_model.h5', compile=False)
+#model = tf_keras.models.load_model('plant_model.h5', compile=False)
 
 CLASSES = [
     'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
