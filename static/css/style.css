@@ -13,24 +13,6 @@ body {
     color: var(--text);
 }
 
-/*  NAVBAR  */
-.navbar {
-    background-color: var(--primary);
-    padding: 15px 20px;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.navbar a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-}
-.nav-links a { margin-left: 20px; }
 
 /* SHARED BUTTONS  */
 .btn {
@@ -102,28 +84,6 @@ body {
     color: var(--text-main);
     margin: 0;
     line-height: 1.6;
-}
-
-/* --- NAVIGATION --- */
-.navbar {
-    background-color: var(--primary-dark);
-    color: var(--white);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.navbar a {
-    color: var(--primary-light);
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.navbar a:hover {
-    color: var(--white);
 }
 
 /* --- MAIN CONTAINER --- */
@@ -296,3 +256,385 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- 1. GLOBAL RESET --- */
+/* Ensures the header touches the very top and sides of the browser */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- 2. THE RECTANGULAR NAVBAR --- */
+.navbar {
+    width: 100% !important;   /* Edge-to-edge width */
+    height: 75px;             /* Classic professional height */
+    background-color: #ffffff; /* Solid white background */
+    border-bottom: 2px solid #f0f0f0; /* Thin gray divider line */
+    
+    /* Sticky/Fixed Positioning */
+    position: fixed;          /* Stays at the top while scrolling */
+    top: 0;                   /* Anchors to absolute top */
+    left: 0;
+    z-index: 1000;            /* Stays above all other page content */
+    
+    /* Shape & Layout */
+    border-radius: 0 !important; /* Removes all "pill" curves */
+    margin: 0 !important;     /* Removes all outer gaps */
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle professional shadow */
+}
+
+/* --- 3. THE CONTENT CONTAINER --- */
+.nav-container {
+    width: 100%;
+    max-width: 1200px;        /* Prevents content from stretching too far */
+    margin: 0 auto;           /* Centers the brand and links */
+    padding: 0 40px;          /* Side spacing for mobile/tablet */
+    display: flex;
+    justify-content: space-between; /* Brand Left, Links Right */
+    align-items: center;
+}
+
+/* --- 4. BRAND LOGO STYLING --- */
+.logo a {
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1b4332;           /* Your brand's deep green */
+    display: flex;
+    align-items: center;
+}
+
+/* --- 5. NAVIGATION LINKS --- */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 35px;                /* Spacing between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #444444; 
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    transition: all 0.3s ease; /* Smooth color fade */
+    border-bottom: 2px solid transparent;
+}
+
+/* --- 6. ACTIVE & HOVER STATES --- */
+/* Highlight effect (Dark Green) */
+.nav-links a:hover, 
+.nav-links a.active {
+    color: #1b4332 !important;         /* Bright Leaf Green */
+    border-bottom: 2px solid #1b4332;  /* Matching underline */
+}
+.logo a {
+    color: #1b4332; 
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+/* --- 7. PAGE CONTENT SPACING --- */
+/* IMPORTANT: Since navbar is 'fixed', we must push the body down 
+   so the header doesn't cover your "Empowering Farmers" title */
+body {
+    padding-top: 75px; 
+}
+
+/* --- 8. MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 20px;
+    }
+    .nav-links {
+        gap: 15px;
+    }
+    .nav-links a {
+        font-size: 0.75rem;
+    }
+}
+
+/* --- FOOTER STYLING --- */
+footer {
+    background-color: #1b4332; /* Match your brand's deep green */
+    color: #ffffff;
+    padding: 40px 0 20px 0;
+    margin-top: 50px; /* Gap between content and footer */
+    width: 100%;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+
+.footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #74c365; /* Leaf Green for titles */
+}
+
+.footer-section p, .footer-section li {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #d8f3dc;
+    list-style: none;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    color: #95d5b2;
+}
+.footer-section ul li {
+    margin-bottom: 10px; /* Space out the links */
+}
+
+.footer-section ul li a {
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: #ffffff !important; /* Turns white when hovered */
+}
+/* Center the middle column header and list */
+.footer-section:nth-child(2) {
+    text-align: center; /* Centers the 'Quick Links' heading */
+}
+
+.footer-section:nth-child(2) ul {
+    padding: 0;
+    list-style: none;
+    display: inline-block; /* Allows the list to stay together but be centered */
+    text-align: left;      /* Optional: keeps the bullet points aligned with each other while centered */
+}
+
+/* Ensure the links are easy to read */
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+/* Container for sections */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: #1b4332;
+    margin-bottom: 40px;
+}
+
+/* About Section Styles */
+.about-section {
+    background-color: #f9fdfb;
+    padding: 80px 0;
+}
+
+.about-grid {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    text-align: left;
+}
+
+.about-text h2 {
+    color: #1b4332;
+    margin-bottom: 20px;
+}
+
+.benefit-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.benefit-list li {
+    margin-bottom: 10px;
+    color: #2d6a4f;
+    font-weight: 600;
+}
+
+.benefit-list i {
+    margin-right: 10px;
+    color: #49a078;
+}
+
+.image-placeholder {
+    font-size: 150px;
+    background: #e9f5ef;
+    padding: 40px;
+    border-radius: 20px;
+}
+
+/* Main Button */
+.main-btn {
+    display: inline-block;
+    background: #49a078;
+    color: white;
+    padding: 15px 35px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.main-btn:hover {
+    background: #1b4332;
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    .about-grid { flex-direction: column; text-align: center; }
+}
+/* 1. Remove the default link styling in the footer */
+.footer-section ul li a {
+    text-decoration: none;    /* Removes the underline */
+    color: #d8f3dc;           /* A light, soft green that's easy to read on dark green */
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+/* 2. Hover effect to make it interactive */
+.footer-section ul li a:hover {
+    color: #ffffff;           /* Turns pure white when you hover over it */
+    text-decoration: underline; /* Optional: adds underline only on hover */
+}
+
+/* 3. Center the Quick Links section properly */
+.footer-section:nth-child(2) {
+    text-align: center;
+}
+
+.footer-section:nth-child(2) ul {
+    padding: 0;
+    list-style: none; /* Removes the bullet points */
+}
+
+/* 1. Target the list specifically to kill the default 40px indent */
+.footer-section ul {
+    list-style-type: none !important; /* Removes bullets */
+    padding-left: 0 !important;      /* Forces text to the left edge */
+    padding-inline-start: 0 !important; /* Fixes modern browser defaults */
+    margin: 0 !important;            /* Removes all outer gaps */
+    text-align: left !important;     /* Ensures it stays left-aligned */
+}
+
+/* 2. Space out the links vertically */
+.footer-section ul li {
+    margin-bottom: 12px;             /* Better spacing for touch/clicks */
+    padding: 0 !important;           /* Ensures no inner padding is pushing it */
+    text-align: left !important;
+}
+
+/* 3. Link styling for the professional look */
+.footer-section ul li a {
+    text-decoration: none;
+    color: #d8f3dc;
+    font-size: 0.95rem;
+    display: block;                  /* Makes the whole line clickable */
+}
+/* Mobile Responsive Footer Fix */
+@media (max-width: 768px) {
+    .footer-container {
+        display: flex;
+        flex-direction: column; /* Stacks sections vertically */
+        align-items: center;    /* Centers everything on the screen */
+        text-align: center;     /* Centers all text inside sections */
+        gap: 30px;              /* Space between stacked sections */
+    }
+
+    .footer-section {
+        width: 100%;
+        margin-bottom: 0 !important;
+    }
+
+    /* Force the list to center properly on mobile */
+    .footer-section ul {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the links under the heading */
+    }
+
+    .footer-section ul li {
+        text-align: center !important;
+        margin-bottom: 12px;
+    }
+
+    /* Adjust padding for a cleaner look */
+    footer {
+        padding: 40px 20px;
+    }
+}
+/* --- HAMBURGER STYLING --- */
+.hamburger {
+    display: none; /* Hidden on desktop */
+    font-size: 1.5rem;
+    color: #1b4332;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: block; /* Show only on mobile */
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 75px; /* Directly under the navbar */
+        right: -100%; /* Hidden off-screen by default */
+        flex-direction: column;
+        background: #ffffff;
+        width: 100%;
+        height: auto;
+        padding: 20px 0;
+        text-align: center;
+        transition: 0.3s ease;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        border-bottom: 2px solid #49a078;
+    }
+
+    /* When the menu is 'open', slide it in */
+    .nav-links.show {
+        right: 0;
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+}
+
+
+
+
+
+
+
+
+

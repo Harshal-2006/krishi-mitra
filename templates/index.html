@@ -4,22 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KrishiMitra | Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="navbar">
-        <div>🌿 KrishiMitra</div>
-        <div class="nav-links">
-            <a href="/advisor">Crop Advisor</a>
-            <a href="/doctor">Plant Doctor</a>
-            <a href="/schemes">Govt Schemes</a>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="/"><span>🌿 KrishiMitra</span></a>
         </div>
+
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="/">HOME</a></li>
+            <li><a href="/advisor">ADVISOR</a></li>
+            <li><a href="/doctor">DOCTOR</a></li>
+            <li><a href="/schemes">SCHEMES</a></li>
+        </ul>
     </div>
+</nav>
 
-    <div class="hero">
-        <h1>Empowering Farmers with AI</h1>
-        <p>Choose a tool below to get started with smart farming.</p>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Empowering Farmers with AI</h1>
+            <p>Smart farming solutions for a sustainable future. Predict diseases, get expert advice, and find government support in one place.</p>
+            <a href="#tools" class="main-btn">Explore Tools</a>
+        </div>
+    </header>
 
+    <section id="tools" class="container">
+        <h2 class="section-title">Our AI Powered Tools</h2>
         <div class="cards">
             <a href="/doctor" class="card">
                 <div class="icon">🩺</div>
@@ -34,13 +51,95 @@
                 <p>Read standard guidelines and tips for protecting your harvest.</p>
                 <span class="btn">View Tips</span>
             </a>
+
             <a href="/schemes" class="card">
                 <div class="icon">📜</div>
                 <h2>Govt Schemes</h2>
-                <p>Check your eligibility for PM-KISAN, Fasal Bima, and state-level subsidies for 2026.</p>
+                <p>Check your eligibility for PM-KISAN and state-level subsidies for 2026.</p>
                 <span class="btn">Check Schemes</span>
             </a>
         </div>
-    </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Why Choose KrishiMitra?</h2>
+                    <p>Agriculture is the backbone of our economy. KrishiMitra uses <strong>Google Gemini AI</strong> to bridge the gap between traditional farming and modern technology.</p>
+                    <ul class="benefit-list">
+                        <li><i class="fas fa-check-circle"></i> Instant Disease Detection</li>
+                        <li><i class="fas fa-check-circle"></i> Localized Crop Advice</li>
+                        <li><i class="fas fa-check-circle"></i> Simplified Policy Access</li>
+                    </ul>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">🚜</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>🌿 KrishiMitra</h3>
+                <p>Leading the digital revolution in Indian Agriculture.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/advisor">Crop Advisor</a></li>
+                    <li><a href="/doctor">AI Plant Doctor</a></li>
+                    <li><a href="/schemes">Government Schemes</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Team Project</h3>
+                <p>National Project Competition 2026.<br>Saswad, Maharashtra.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 KrishiMitra Team
+        </div>
+    </footer>
+
+
 </body>
+<script>
+
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    // Toggle the "show" class when hamburger is clicked
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('show');
+        
+        // Optional: Change icon to an 'X' when open
+        const icon = hamburger.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+    // 1. Get the current page URL path (e.g., /advisor or /doctor)
+    const currentPath = window.location.pathname;
+    
+    // 2. Select all navigation links inside the navbar
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        // 3. Remove 'active' class from all links first to ensure a clean state
+        link.classList.remove('active');
+
+        // 4. Check if the link's href matches the current path
+        // We also specifically check for the root "/" to highlight HOME correctly
+        const linkHref = link.getAttribute('href');
+        
+        if (linkHref === currentPath || (currentPath === '/' && linkHref === '/')) {
+            link.classList.add('active');
+        }
+    });
+</script>
+
 </html>

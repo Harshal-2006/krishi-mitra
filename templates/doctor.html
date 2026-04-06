@@ -4,13 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KrishiMitra | Plant Doctor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="navbar">
-        <div>🌿 KrishiMitra</div>
-        <a href="/">← Back Home</a>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="/"><span>🌿 KrishiMitra</span></a>
+        </div>
+
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-links" id="nav-menu">
+            <li><a href="/">HOME</a></li>
+            <li><a href="/advisor">ADVISOR</a></li>
+            <li><a href="/doctor">DOCTOR</a></li>
+            <li><a href="/schemes">SCHEMES</a></li>
+        </ul>
     </div>
+</nav>
 
     <div class="container">
         <h1 style="margin-top:0;">AI Plant Doctor</h1>
@@ -59,6 +74,38 @@
     </div>
 
 <script>
+
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    // Toggle the "show" class when hamburger is clicked
+    hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('show');
+        
+        // Optional: Change icon to an 'X' when open
+        const icon = hamburger.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+
+    // 1. Get the current page URL path
+    const currentPath = window.location.pathname;
+    
+    // 2. Select all navigation links
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        // 3. Remove any existing 'active' class
+        link.classList.remove('active');
+
+        // 4. If the link's href matches the current path, highlight it
+        // We check for '/' specifically for the Home link
+        if (link.getAttribute('href') === currentPath || 
+           (currentPath === '/' && link.getAttribute('href') === '/')) {
+            link.classList.add('active');
+        }
+    });
+
     let currentData = {};
 
     function previewImage() {
@@ -146,4 +193,30 @@
 
 </script>
 </body>
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>🌿 KrishiMitra</h3>
+            <p>Built with ❤️ for farmers</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="/advisor" style="color: #d8f3dc; text-decoration: none;">Crop Advisor</a></li>
+                <li><a href="/doctor" style="color: #d8f3dc; text-decoration: none;">AI Plant Doctor</a></li>
+                <li><a href="/schemes" style="color: #d8f3dc; text-decoration: none;">Government Schemes</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h3>Team Project</h3>
+            <p>Developed for Project Competition 2026.</p>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        &copy; 2026 KrishiMitra Team 
+    </div>
+</footer>
 </html>
