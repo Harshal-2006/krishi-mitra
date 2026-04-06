@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 #Load model
-model = tf.keras.models.load_model('plant_model.h5', compile=False)
+model = tf.keras.models.load_model('plant_model.h5')
 
 CLASSES = [
     'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
