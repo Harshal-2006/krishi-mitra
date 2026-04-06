@@ -1,4 +1,6 @@
 flask
 tensorflow-cpu
 google-generativeai
+python-dotenv
 pillow
+gunicorn
