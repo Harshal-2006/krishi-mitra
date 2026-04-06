@@ -1,6 +1,6 @@
 flask
 tensorflow-cpu==2.15.0
-keras==2.15.0
+tf_keras==2.15.0
 google-generativeai
 python-dotenv
 pillow

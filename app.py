@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import os
+import tf_keras
 os.environ['TF_USE_LEGACY_KERAS'] = '1'
 import tensorflow as tf
 from keras.preprocessing import image
@@ -14,7 +15,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 #Load model
-model = tf.keras.models.load_model('plant_model.h5')
+model = tf_keras.models.load_model('plant_model.h5', compile=False)
 
 CLASSES = [
     'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
