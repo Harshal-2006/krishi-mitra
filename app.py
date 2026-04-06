@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import os
+os.environ['TF_USE_LEGACY_KERAS'] = '1'
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import numpy as np
