@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiMitra | Govt Schemes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div>🌿 KrishiMitra</div>
+        <a href="/">← Back Home</a>
+    </div>
+
+    <div class="container" style="max-width: 900px;">
+        <h1>Government Schemes 2026</h1>
+        <p style="color: #52796f;">Stay updated with the latest financial aid and subsidies.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; text-align: left;">
+            {% for scheme in schemes %}
+            <div style="background: white; padding: 20px; border-radius: 15px; border: 1px solid #e0e0e0; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <span style="font-size: 10px; background: #d8f3dc; color: #1b4332; padding: 3px 8px; border-radius: 5px; font-weight: bold; text-transform: uppercase;">
+                    {{ scheme.type }}
+                </span>
+                <h3 style="margin: 10px 0 5px 0; color: #1b4332;">{{ scheme.name }}</h3>
+                <p style="font-size: 0.9rem; margin: 0; color: #2d6a4f;"><strong>Benefit:</strong> {{ scheme.benefit }}</p>
+                <p style="font-size: 0.85rem; color: #52796f; margin: 5px 0 15px 0;"><strong>Status:</strong> {{ scheme.status }}</p>
+                <a href="{{ scheme.link }}" target="_blank" class="btn" style="padding: 8px 15px; font-size: 0.85rem; text-decoration: none; display: inline-block;">
+                    Apply Now →
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

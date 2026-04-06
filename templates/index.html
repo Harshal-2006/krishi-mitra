@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiMitra | Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div>🌿 KrishiMitra</div>
+        <div class="nav-links">
+            <a href="/advisor">Crop Advisor</a>
+            <a href="/doctor">Plant Doctor</a>
+            <a href="/schemes">Govt Schemes</a>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>Empowering Farmers with AI</h1>
+        <p>Choose a tool below to get started with smart farming.</p>
+
+        <div class="cards">
+            <a href="/doctor" class="card">
+                <div class="icon">🩺</div>
+                <h2>AI Plant Doctor</h2>
+                <p>Upload a photo of a sick leaf and let our AI diagnose the disease instantly.</p>
+                <span class="btn">Scan Leaf</span>
+            </a>
+
+            <a href="/advisor" class="card">
+                <div class="icon">🌾</div>
+                <h2>Crop Advisor</h2>
+                <p>Read standard guidelines and tips for protecting your harvest.</p>
+                <span class="btn">View Tips</span>
+            </a>
+            <a href="/schemes" class="card">
+                <div class="icon">📜</div>
+                <h2>Govt Schemes</h2>
+                <p>Check your eligibility for PM-KISAN, Fasal Bima, and state-level subsidies for 2026.</p>
+                <span class="btn">Check Schemes</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

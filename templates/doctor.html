@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiMitra | Plant Doctor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div>🌿 KrishiMitra</div>
+        <a href="/">← Back Home</a>
+    </div>
+
+    <div class="container">
+        <h1 style="margin-top:0;">AI Plant Doctor</h1>
+        <p style="color: #52796f; margin-bottom: 30px;">Upload a clear photo of the infected leaf.</p>
+
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+            <div style="font-size: 40px; margin-bottom: 10px;">📸</div>
+            <p>Click here to select an image</p>
+            <input type="file" id="file-input" style="display: none;" accept="image/*" onchange="previewImage()">
+        </div>
+
+        <img id="preview" src="" alt="Image Preview" style="max-width: 100%; border-radius: 10px; margin-bottom: 20px; display: none;">
+        
+        <button id="scan-btn" class="btn" style="width: 100%; display: none;" onclick="scanImage()">Scan Leaf Now</button>
+
+        <div id="result-box" style="display: none;">
+            <div class="disease" id="disease-name">Analyzing...</div>
+            <div class="confidence" id="confidence"></div>
+        </div>
+
+        <div id="treatment-box" style="display: none; margin-top: 25px; text-align: left;">
+            <h3 style="color: #1b4332; margin-bottom: 15px; border-bottom: 2px solid #b7e4c7; padding-bottom: 5px;">Expert Treatment Plan:</h3>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                
+                <div style="background: #f1f8e9; padding: 15px; border-radius: 10px; border-left: 5px solid #4caf50;">
+                    <h4 style="margin: 0; color: #2e7d32; display: flex; align-items: center; gap: 8px;">
+                        <span>🌱</span> Organic Treatment
+                    </h4>
+                    <p id="organic-text" style="margin-top: 8px; color: #1b5e20; line-height: 1.4; font-size: 0.95rem;"></p>
+                </div>
+
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; border-left: 5px solid #2196f3;">
+                    <h4 style="margin: 0; color: #1565c0; display: flex; align-items: center; gap: 8px;">
+                        <span>🧪</span> Chemical Treatment
+                    </h4>
+                    <p id="chemical-text" style="margin-top: 8px; color: #0d47a1; line-height: 1.4; font-size: 0.95rem;"></p>
+                </div>
+
+                <div id="lang-toggle" style="display:none; margin-bottom: 10px; text-align: right;">
+                    <button onclick="switchLang('en')" class="btn-sm">English</button>
+                    <button onclick="switchLang('mr')" class="btn-sm" style="background:#40916c;">मराठी</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<script>
+    let currentData = {};
+
+    function previewImage() {
+        const file = document.getElementById('file-input').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('scan-btn').style.display = 'block';
+                document.getElementById('upload-area').style.display = 'none';
+                document.getElementById('result-box').style.display = 'none';
+                document.getElementById('treatment-box').style.display = 'none';
+                if(document.getElementById('lang-toggle')) {
+                    document.getElementById('lang-toggle').style.display = 'none';
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function scanImage() {
+        const file = document.getElementById('file-input').files[0];
+        if (!file) return;
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('disease-name').innerText = "AI is analyzing...";
+        document.getElementById('disease-name').style.color = "#1b4332"; 
+        document.getElementById('confidence').innerText = "Generating treatment plan...";
+        document.getElementById('scan-btn').disabled = true;
+        document.getElementById('scan-btn').innerText = "Scanning...";
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            currentData = data;
+
+            if (data.error) {
+                document.getElementById('disease-name').innerText = data.error;
+                document.getElementById('disease-name').style.color = "#d90429";
+                document.getElementById('confidence').style.display = 'none';
+                document.getElementById('treatment-box').style.display = 'none';
+                if(document.getElementById('lang-toggle')) {
+                    document.getElementById('lang-toggle').style.display = 'none';
+                }
+            } else {
+                document.getElementById('disease-name').innerText = data.disease;
+                document.getElementById('disease-name').style.color = "#1b4332";
+                document.getElementById('confidence').innerText = "AI Confidence: " + data.confidence;
+                document.getElementById('confidence').style.display = 'inline-block';
+
+                if(document.getElementById('lang-toggle')) {
+                    document.getElementById('lang-toggle').style.display = 'block';
+                }
+                document.getElementById('treatment-box').style.display = 'block';
+                
+                
+                switchLang('en');
+            }
+        } catch (error) {
+            document.getElementById('disease-name').innerText = "Server Error. Is app.py running?";
+            document.getElementById('disease-name').style.color = "#d90429";
+            document.getElementById('confidence').style.display = 'none';
+        } finally {
+            document.getElementById('scan-btn').disabled = false;
+            document.getElementById('scan-btn').innerText = "Scan Another Leaf";
+            document.getElementById('scan-btn').onclick = () => window.location.reload();
+        }
+    }
+
+    function switchLang(lang) {
+    if (lang === 'en') {
+        document.getElementById('organic-text').innerText = currentData.organic_en;
+        document.getElementById('chemical-text').innerText = currentData.chemical_en;
+    } else if (lang === 'mr') {
+        document.getElementById('organic-text').innerText = currentData.organic_mr;
+        document.getElementById('chemical-text').innerText = currentData.chemical_mr;
+    } 
+}
+
+</script>
+</body>
+</html>

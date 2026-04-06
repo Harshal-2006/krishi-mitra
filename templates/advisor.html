@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiMitra | Crop Advisor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #1b4332; }
+        select, input { 
+            width: 100%; padding: 12px; border-radius: 8px; 
+            border: 1px solid #ccc; font-size: 1rem; 
+        }
+        #advice-display { 
+            margin-top: 30px; padding: 20px; border-radius: 12px; 
+            background: #fdfdfd; border: 1px solid #e0e0e0; 
+            white-space: pre-wrap; text-align: left; display: none;
+        }
+        .lang-btn-group { margin-top: 15px; text-align: right; display: none; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>🌿 KrishiMitra</div>
+        <a href="/">← Back Home</a>
+    </div>
+
+    <div class="container">
+        <h1>Smart Crop Advisor</h1>
+        <p style="color: #52796f; margin-bottom: 30px;">Get a customized 2026 planting strategy based on your land.</p>
+
+        <div id="advisor-form">
+            <div class="form-group">
+                <label>Soil Type</label>
+                <select id="soil">
+                    <option value="Black Cotton (Kaali Maati)">Black Cotton (Kaali Maati)</option>
+                    <option value="Red Soil">Red Soil</option>
+                    <option value="Loamy/Mixed">Loamy / Mixed</option>
+                    <option value="Sandy Soil">Sandy Soil</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Water Source</label>
+                <select id="water">
+                    <option value="Drip Irrigation">Drip Irrigation</option>
+                    <option value="Well/Borewell">Well / Borewell</option>
+                    <option value="Rain-fed (Bachat)">Rain-fed (Bachat)</option>
+                    <option value="Canal Water">Canal Water</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Current Season</label>
+                <select id="season">
+                    <option value="Zaid/Summer (March-May)">Zaid/Summer (March-May)</option>
+                    <option value="Kharif/Monsoon (June-Oct)">Kharif/Monsoon (June-Oct)</option>
+                    <option value="Rabi/Winter (Nov-Feb)">Rabi/Winter (Nov-Feb)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Land Size (Acres)</label>
+                <input type="number" id="land-size" placeholder="e.g. 2.5">
+            </div>
+
+            <div class="form-group">
+                <label>Previous Crop (to check nutrients)</label>
+                <input type="text" id="prev-crop" placeholder="e.g. Sugarcane, Cotton, None">
+            </div>
+
+            <button class="btn" style="width: 100%;" onclick="getAdvice()">Generate Strategy</button>
+        </div>
+
+        <div class="lang-btn-group" id="lang-btns" style="display: none;">
+            <button onclick="displayLang('en')" class="btn-sm">English</button>
+            <button onclick="displayLang('mr')" class="btn-sm" style="background:#40916c;">मराठी</button>
+        </div>
+
+        <div id="advice-display"></div>
+    </div>
+    
+<script>
+    let fullAdvice = ""; 
+
+    async function getAdvice() {
+        const btn = document.querySelector('.btn');
+        const display = document.getElementById('advice-display');
+        
+        btn.innerText = "Analyzing for Maharashtra...";
+        btn.disabled = true;
+        display.style.display = "block";
+        display.innerText = "Consulting AI Advisor...";
+
+        const payload = {
+            soil: document.getElementById('soil').value,
+            water: document.getElementById('water').value,
+            season: document.getElementById('season').value,
+            land_size: document.getElementById('land-size').value,
+            prev: document.getElementById('prev-crop').value
+        };
+
+        try {
+            const response = await fetch('/get_advice', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            fullAdvice = data.advice;
+
+            document.getElementById('lang-btns').style.display = "block";
+            displayLang('en'); 
+
+        } catch (e) {
+            console.error("Fetch Error:", e);
+            display.innerText = "Connection Error: Check if app.py is running and you saved changes.";
+        } finally {
+            btn.innerText = "Generate Strategy";
+            btn.disabled = false;
+        }
+    }
+
+    function displayLang(lang) {
+        const display = document.getElementById('advice-display');
+        try {
+            if (lang === 'en') {
+                let enPart = fullAdvice.split(/MARATHI:/i)[0];
+                display.innerText = enPart.replace(/ENGLISH:/i, "").trim();
+            } else {
+                let mrPart = fullAdvice.split(/MARATHI:/i)[1];
+                display.innerText = mrPart.trim();
+            }
+        } catch (err) {
+            display.innerText = fullAdvice; 
+        }
+    }
+</script>
+</body>
+</html>
