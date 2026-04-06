@@ -1,60 +1,19 @@
-import os
-# 1. THIS MUST BE THE ABSOLUTE FIRST THING BEFORE ANY IMPORTS
-os.environ['TF_USE_LEGACY_KERAS'] = '1'
-
 from flask import Flask, render_template, request, jsonify
-import tf_keras
+import os
 import tensorflow as tf
-from tf_keras.preprocessing import image
+from tensorflow.keras.preprocessing import image
 import numpy as np
 import google.generativeai as genai
 from dotenv import load_dotenv
-import h5py
-import json
-
 load_dotenv() # .env
+
+os.environ['TF_USE_LEGACY_KERAS'] = '1'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-def load_legacy_h5(filepath):
-    # 2. Open the raw H5 file in 'r+' (Read/Write mode) so we can actually save the fix!
-    f = h5py.File(filepath, mode='r+')
-    
-    # Read the raw model config
-    model_config = f.attrs.get('model_config')
-    if model_config is None:
-        raise ValueError('No model config found in h5 file.')
-        
-    # Decode from bytes to string, then to a Python Dictionary
-    config_str = model_config.decode('utf-8')
-    config_dict = json.loads(config_str)
-    
-    # SURGERY: Find the InputLayer and fix the bad keywords
-    modified = False
-    for layer in config_dict['config']['layers']:
-        if layer['class_name'] == 'InputLayer':
-            # Change 'batch_shape' to 'batch_input_shape'
-            if 'batch_shape' in layer['config']:
-                layer['config']['batch_input_shape'] = layer['config'].pop('batch_shape')
-                modified = True
-            # Completely remove 'optional'
-            if 'optional' in layer['config']:
-                del layer['config']['optional']
-                modified = True
-                
-    # Convert back to string and bytes ONLY if we changed something
-    if modified:
-        fixed_config_str = json.dumps(config_dict)
-        f.attrs.modify('model_config', fixed_config_str.encode('utf-8'))
-        
-    f.close()
-    
-    # Load the fixed model using tf_keras
-    return tf_keras.models.load_model(filepath, compile=False)
-
-# 3. Load your model safely BEFORE setting up the routes
-model = load_legacy_h5('plant_model.h5')
+#Load model
+model = tf.keras.models.load_model('plant_model.h5')
 
 CLASSES = [
     'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
@@ -83,7 +42,7 @@ gemini_model_1 = genai.GenerativeModel('gemini-2.5-flash')
 gemini_model_2 = genai.GenerativeModel('gemini-2.5-flash')
 
 
-# Routes
+#Route
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -238,6 +197,5 @@ def get_advice():
         print(f"ERROR: {e}")
         fallback = "ENGLISH:\n📍 TOP CROPS: Moong or Groundnut.\n🧪 FERTILIZER: Apply NPK 20:40:20.\n⛈️ 2026 WEATHER: Alert: Unseasonal rain expected.\n\nMARATHI:\n📍 मुख्य पिके: मूग किंवा भुईमूग.\n🧪 खत नियोजन: २०:४०:२० NPK वापरा.\n⛈️ २०२६ हवामान: इशारा: अवकाळी पावसाची शक्यता."
         return jsonify({'advice': fallback})
-
 if __name__ == '__main__':
     app.run(debug=True)

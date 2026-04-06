@@ -1,17 +1,19 @@
-# 1. Force Railway to use Python 3.10
-FROM python:3.10-slim
+# Use modern Python to match your local setup
+FROM python:3.12-slim
 
-# 2. Set the working directory
+# Set working directory
 WORKDIR /app
 
-# 3. Copy your requirements first
+# Install dependencies
 COPY requirements.txt .
-
-# 4. Install dependencies (with no cache to save space)
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy the rest of your app (including the .h5 model)
+# Copy all files (fixed the typo here!)
 COPY . .
 
-# 6. Start the web server
-CMD gunicorn app:app -b 0.0.0.0:$PORT
+# Give Hugging Face permission to write to the uploads folder
+RUN chmod -R 777 /app
+
+# Hugging Face Spaces MUST use port 7860
+EXPOSE 7860
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:7860", "--timeout", "120"]
