@@ -7,11 +7,13 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 load_dotenv() # .env
 
+os.environ['TF_USE_LEGACY_KERAS'] = '1'
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 #Load model
-model = tf.keras.models.load_model('plant_model.h5')
+model = tf.keras.models.load_model('plant_model.h5', compile=False)
 
 CLASSES = [
     'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 
