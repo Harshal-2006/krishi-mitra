@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Hugging%20Face-yellow)](https://krishimitra-team-app.hf.space/)
 
-**🔗 Live demo:** https://krishimitra-team-app.hf.space/
+**🔗 Live demo:** https://harshalll007-app.hf.space
 
 ---
 
