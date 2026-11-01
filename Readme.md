@@ -3,7 +3,7 @@
 **AI-powered plant disease detection for farmers.** Upload a photo of a crop leaf and get an instant diagnosis, no agronomist visit required.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Hugging%20Face-yellow)](https://krishimitra-team-app.hf.space/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Hugging%20Face-yellow)](https://harshalll007-app.hf.space/)
 
 **🔗 Live demo:** https://harshalll007-app.hf.space
 
